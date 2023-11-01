@@ -1,0 +1,33 @@
+<div class="form-container">
+    <form [formGroup]="patient" (ngSubmit)="createPatient()">
+        <mat-form-field ngDefaultControl appearance="fill">
+            <mat-label>Full name</mat-label>
+            <input matInput placeholder="Full name" [formControl]="fullNameControl">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Date of Birth</mat-label>
+            <input matInput placeholder="Date of Birth" [matDatepicker]="picker" [formControl]="dateOfBirthControl">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <br>
+        <mat-radio-group [formControl]="genderControl">
+            <mat-radio-button value="male">Male</mat-radio-button>
+            <mat-radio-button value="female">Female</mat-radio-button>
+            <mat-radio-button value="other">Other</mat-radio-button>
+        </mat-radio-group>
+        <br>
+        <mat-form-field>
+            <mat-label>Phone number</mat-label>
+            <input matInput placeholder="Phone Number" [formControl]="phoneNumberControl">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Address</mat-label>
+            <input matInput [formControl]="addressControl">
+        </mat-form-field>
+        <br>
+        <button mat-raised-button type="submit">Create</button>
+    </form>
+</div>
