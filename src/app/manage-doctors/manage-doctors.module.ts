@@ -15,6 +15,7 @@ import { CreatePatientModule } from 'src/app/create-patient/create-patient.modul
 import { CreateDoctorDialogComponent } from './create-doctor-dialog/create-doctor-dialog.component';
 import { DoctorsDashboardComponent } from './doctors-dashboard/doctors-dashboard.component';
 import { ManageDoctorsRoutingModule } from './manage-doctors-routing.module';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ManageDoctorsRoutingModule } from './manage-doctors-routing.module';
     MatDialogModule,
   ],
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    DatePipe
   ],
 })
 export class ManageDoctorsModule { }

@@ -14,12 +14,14 @@ import { MatInputModule } from '@angular/material/input';
 import { CreatePatientModule } from 'src/app/create-patient/create-patient.module';
 import { PatientsDashboardComponent } from './patients-dashboard/patients-dashboard.component';
 import { ManagePatientsRoutingModule } from './manage-patients-routing.module';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
     PatientsDashboardComponent
   ],
   imports: [
+    CommonModule,
     ManagePatientsRoutingModule,
     CreatePatientModule,
     ReactiveFormsModule,
@@ -38,7 +40,8 @@ import { ManagePatientsRoutingModule } from './manage-patients-routing.module';
     MatDialogModule,
   ],
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    DatePipe
   ],
 })
 export class ManagePatientsModule { }
