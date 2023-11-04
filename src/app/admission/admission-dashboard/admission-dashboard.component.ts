@@ -29,9 +29,13 @@ export class AdmissionDashboardComponent {
   }
 
   openCreatePatient() {
-    this.dialog.open(CreatePatientDialogComponent, {
+    const dialogRef = this.dialog.open(CreatePatientDialogComponent, {
       width: 'fit-content',
       height: 'fit-content'
+    })
+
+    dialogRef.componentInstance.successEvent.subscribe(() => {
+      dialogRef.close()
     })
   }
 }

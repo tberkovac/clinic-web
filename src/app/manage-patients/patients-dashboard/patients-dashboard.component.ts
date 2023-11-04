@@ -24,6 +24,10 @@ export class PatientsDashboardComponent {
 
   constructor(private patientService: PatientService, private dialog: MatDialog, private router: Router) {
     this.dataSource.paginator = this.paginator
+    this.initializePatientList()
+  }
+
+  initializePatientList() {
     this.patientService.getPatients().subscribe({
       next: (patients) => this.patients = patients,
       error: (err) => console.log(err)
@@ -39,9 +43,13 @@ export class PatientsDashboardComponent {
   }
 
   openCreatePatient() {
-    this.dialog.open(CreatePatientDialogComponent, {
+    const dialogRef = this.dialog.open(CreatePatientDialogComponent, {
       width: 'fit-content',
       height: 'fit-content'
+    })
+
+    dialogRef.componentInstance.successEvent.subscribe(() => {
+      this.initializePatientList()
     })
   }
 }

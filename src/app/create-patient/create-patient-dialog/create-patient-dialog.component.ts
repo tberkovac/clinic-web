@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Patient } from 'src/app/models/patient';
+import { PatientService } from 'src/app/services/patient.service';
 
 @Component({
   selector: 'app-create-patient-dialog',
@@ -8,10 +10,12 @@ import { FormBuilder, FormControl } from '@angular/forms';
 })
 export class CreatePatientDialogComponent {
 
-  fullNameControl = new FormControl("")
-  dateOfBirthControl = new FormControl()
-  umcnControl = new FormControl()
-  genderControl = new FormControl('other')
+  @Output() successEvent = new EventEmitter<void>();
+
+  fullNameControl = new FormControl<string>("", [Validators.required])
+  dateOfBirthControl = new FormControl("", [Validators.required])
+  umcnControl = new FormControl("", Validators.required)
+  genderControl = new FormControl('other', Validators.required)
   addressControl = new FormControl()
   phoneNumberControl = new FormControl()
 
@@ -25,11 +29,19 @@ export class CreatePatientDialogComponent {
     phoneNumber: this.phoneNumberControl,
   });
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private patientService: PatientService) {
 
   }
 
   createPatient() {
-    console.log(this.patient.value)
+    const patientData: Patient = {
+      ...this.patient.value as unknown as Patient,
+      patientId: 0,
+    };
+    patientData.gender = parseInt(patientData.gender.toString(), 10),
+    this.patientService.createPatient(patientData).subscribe({
+      next: (patient) => this.successEvent.emit(),
+      error: (err) => console.log(err)
+    })
   }
 }
