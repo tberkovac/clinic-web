@@ -10,6 +10,7 @@ export class CreatePatientDialogComponent {
 
   fullNameControl = new FormControl("")
   dateOfBirthControl = new FormControl()
+  umcnControl = new FormControl()
   genderControl = new FormControl('other')
   addressControl = new FormControl()
   phoneNumberControl = new FormControl()
@@ -18,6 +19,7 @@ export class CreatePatientDialogComponent {
   patient = this.formBuilder.group({
     fullName: this.fullNameControl,
     dateOfBirth: this.dateOfBirthControl,
+    umcn: this.umcnControl,
     gender: this.genderControl,
     address: this.addressControl,
     phoneNumber: this.phoneNumberControl,

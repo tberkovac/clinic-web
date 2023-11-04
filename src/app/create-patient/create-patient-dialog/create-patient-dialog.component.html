@@ -12,6 +12,11 @@
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
         <br>
+        <mat-form-field>
+            <mat-label>UMCN</mat-label>
+            <input matInput placeholder="Unique Master Citizen Number" [formControl]="umcnControl">
+        </mat-form-field>
+        <br>
         <mat-radio-group [formControl]="genderControl">
             <mat-radio-button value="male">Male</mat-radio-button>
             <mat-radio-button value="female">Female</mat-radio-button>
