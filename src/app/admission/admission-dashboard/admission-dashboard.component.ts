@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CreatePatientDialogComponent } from '../../create-patient/create-patient-dialog/create-patient-dialog.component';
+import { CreateAdmissionDialogComponent } from '../create-admission-dialog/create-admission-dialog.component';
 
 @Component({
   selector: 'app-admission-dashboard',
@@ -12,9 +13,11 @@ import { CreatePatientDialogComponent } from '../../create-patient/create-patien
   styleUrls: ['./admission-dashboard.component.scss']
 })
 export class AdmissionDashboardComponent {
-  admissions : Admission[] = [{admissionId: 1, admissionDate: new Date(), patientName: "Patient1", doctorName: "Doctor1", isEmergency: false},
+  admissions! : Admission[] 
+/*  = [{admissionId: 1, admissionDate: new Date(), patientName: "Patient1", doctorName: "Doctor1", isEmergency: false},
   {admissionId: 2, admissionDate: new Date(), patientName: "Patient2", doctorName: "Doctor2", isEmergency: false},
   {admissionId: 3, admissionDate: new Date(), patientName: "Patient3", doctorName: "Doctor3", isEmergency: false}]
+  */
   displayedColumns: string[] = ["admissionId", "Date", "Patient Name", "Doctor Name", "Emergency", "Action"];
   @ViewChild(MatPaginator) paginator! : MatPaginator
   dataSource = new MatTableDataSource<Admission>(this.admissions)
@@ -36,6 +39,13 @@ export class AdmissionDashboardComponent {
 
     dialogRef.componentInstance.successEvent.subscribe(() => {
       dialogRef.close()
+    })
+  }
+
+  openCreateAdmission() {
+    const dialogRef = this.dialog.open(CreateAdmissionDialogComponent, {
+      width: 'fit-content',
+      height: 'fit-content'
     })
   }
 }

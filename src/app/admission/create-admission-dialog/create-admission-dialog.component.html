@@ -1,0 +1,45 @@
+<ng-container *ngIf="data$ | async as data">
+    <div class="form-container">
+        <form [formGroup]="admission" (ngSubmit)="createAdmission()">
+            <mat-form-field>
+                <mat-label>Date of appointment</mat-label>
+                <input matInput placeholder="Date of Birth" [matDatepicker]="picker"
+                    [formControl]="dateOfAdmissionControl">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+                <mat-label>Doctor</mat-label>
+                <mat-select [formControl]="doctorIdControl" required>
+                    <mat-option>--</mat-option>
+                    <mat-option *ngFor="let doctor of data.doctors" [value]="doctor.doctorId">
+                        {{doctor.name + ' ' + doctor.surname + ' - ' + doctor.code}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="doctorIdControl.hasError('required')">Please choose a doctor</mat-error>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+                <mat-label>Patient</mat-label>
+                <mat-select [formControl]="patientIdControl" required>
+                    <mat-option>--</mat-option>
+                    <mat-option *ngFor="let patient of data.patients" [value]="patient.patientId">
+                        {{ patient.fullName + ' - ' + patient.umcn}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="doctorIdControl.hasError('required')">Please choose a patient</mat-error>
+            </mat-form-field>
+            <br>
+            <mat-radio-group [formControl]="emergencyControl">
+                <span>Emergency: </span>
+                <mat-radio-button value=true>Yes</mat-radio-button>
+                <mat-radio-button value=false>No</mat-radio-button>
+            </mat-radio-group>
+            <br>
+            <div class="button-container">
+                <button mat-raised-button type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</ng-container>
