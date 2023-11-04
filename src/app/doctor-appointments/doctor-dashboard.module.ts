@@ -12,12 +12,12 @@ import { MatRadioModule } from '@angular/material/radio'
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CreatePatientModule } from 'src/app/create-patient/create-patient.module';
-import { DoctorsDashboardComponent } from '../manage-doctors/doctors-dashboard/doctors-dashboard.component';
 import { DoctorDashboardRoutingModule } from './doctor-dashboard-routing.module';
+import { DoctorDashboardComponent } from './doctor-dashboard/doctor-dashboard.component';
 
 @NgModule({
   declarations: [
-    DoctorsDashboardComponent
+    DoctorDashboardComponent
   ],
   imports: [
     DoctorDashboardRoutingModule,
