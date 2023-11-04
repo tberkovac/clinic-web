@@ -10,7 +10,8 @@ import { PatientService } from 'src/app/services/patient.service';
 })
 export class CreatePatientDialogComponent {
 
-  @Output() successEvent = new EventEmitter<void>();
+  @Output() successEvent = new EventEmitter<Patient>();
+  @Output() failureEvent = new EventEmitter<string>();
 
   fullNameControl = new FormControl<string>("", [Validators.required])
   dateOfBirthControl = new FormControl("", [Validators.required])
@@ -40,8 +41,8 @@ export class CreatePatientDialogComponent {
     };
     patientData.gender = parseInt(patientData.gender.toString(), 10),
     this.patientService.createPatient(patientData).subscribe({
-      next: (patient) => this.successEvent.emit(),
-      error: (err) => console.log(err)
+      next: (patient) => this.successEvent.emit(patient),
+      error: (err) => this.failureEvent.emit(err)
     })
   }
 }

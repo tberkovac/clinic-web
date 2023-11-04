@@ -1,1 +1,37 @@
-<p>create-doctor-dialog works!</p>
+<div class="form-container">
+    <form [formGroup]="doctor" (ngSubmit)="createDoctor()">
+        <mat-form-field ngDefaultControl appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Name" [formControl]="nameControl">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Surname</mat-label>
+            <input matInput placeholder="Surname" [formControl]="surnameControl">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Title</mat-label>
+            <mat-select [formControl]="titleIdControl" required>
+                <mat-option *ngFor="let title of titles" [value]="title.titleId">
+                    {{title.titleName}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="titleIdControl.hasError('required')">Please choose a title</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Code</mat-label>
+            <input matInput [formControl]="codeControl">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput [formControl]="passwordControl">
+        </mat-form-field>
+        <br>
+        <div class="button-container">
+            <button mat-raised-button type="submit">Create</button>
+        </div>
+    </form>
+</div>

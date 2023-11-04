@@ -6,6 +6,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CreatePatientDialogComponent } from '../../create-patient/create-patient-dialog/create-patient-dialog.component';
 import { CreateAdmissionDialogComponent } from '../create-admission-dialog/create-admission-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-admission-dashboard',
@@ -27,7 +28,7 @@ export class AdmissionDashboardComponent {
     end: new FormControl<Date | null>(null),
   });
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private snackBar: MatSnackBar) {
     this.dataSource.paginator = this.paginator
   }
 
@@ -37,7 +38,13 @@ export class AdmissionDashboardComponent {
       height: 'fit-content'
     })
 
-    dialogRef.componentInstance.successEvent.subscribe(() => {
+    dialogRef.componentInstance.successEvent.subscribe((patient) => {
+      this.openSnackbar(`Successfully added patient with name ${patient.fullName}!`)
+      dialogRef.close()
+    })
+
+    dialogRef.componentInstance.failureEvent.subscribe((error) => {
+      this.openSnackbar(`Error while processing the request ${error}`)
       dialogRef.close()
     })
   }
@@ -47,5 +54,9 @@ export class AdmissionDashboardComponent {
       width: 'fit-content',
       height: 'fit-content'
     })
+  }
+
+  openSnackbar(message: string) {
+    this.snackBar.open(message, 'Close', { duration: 4000, verticalPosition: 'bottom' });
   }
 }

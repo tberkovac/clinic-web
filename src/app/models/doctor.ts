@@ -4,6 +4,8 @@ export interface Doctor {
     doctorId: number,
     name: string,
     surname: string,
+    titleId: number,
     title: Title,
-    code: string
+    code: string,
+    password: string
 }

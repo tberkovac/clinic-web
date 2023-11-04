@@ -5,7 +5,7 @@ import { MatTableModule } from '@angular/material/table'
 import { MatCardModule } from '@angular/material/card'
 import { MatButtonModule } from '@angular/material/button'
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DATE_LOCALE, MatNativeDateModule, MatRippleModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule, MatRippleModule } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio'
@@ -15,7 +15,9 @@ import { CreatePatientModule } from 'src/app/create-patient/create-patient.modul
 import { CreateDoctorDialogComponent } from './create-doctor-dialog/create-doctor-dialog.component';
 import { DoctorsDashboardComponent } from './doctors-dashboard/doctors-dashboard.component';
 import { ManageDoctorsRoutingModule } from './manage-doctors-routing.module';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar'
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { DatePipe } from '@angular/common';
     DoctorsDashboardComponent
   ],
   imports: [
+    CommonModule,
     ManageDoctorsRoutingModule,
     CreatePatientModule,
     ReactiveFormsModule,
@@ -39,6 +42,9 @@ import { DatePipe } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatSnackBarModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
