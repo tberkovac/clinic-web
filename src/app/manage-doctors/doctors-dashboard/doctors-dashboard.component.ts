@@ -48,7 +48,7 @@ export class DoctorsDashboardComponent {
     })
 
     dialogRef.componentInstance.failureEvent.subscribe((error) => {
-      this.openSnackbar(`Error while processing the request ${error}`)
+      this.openSnackbar(`Error while processing the request ${JSON.stringify(error)}`)
       dialogRef.close()
     })
   }

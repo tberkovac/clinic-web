@@ -1,5 +1,6 @@
 <mat-card>
     <mat-card-header class="header-container">
+        <button mat-raised-button (click)="logout()">Logout</button>
         <button mat-raised-button [routerLink]="'manage-doctors'">Doctors</button>
         <button mat-raised-button [routerLink]="'manage-patients'">Patients</button>
         <button mat-raised-button (click)="openCreatePatient()">Create Patient</button>
@@ -22,7 +23,9 @@
                 </ng-container>
                 <ng-container matColumnDef="Doctor Name">
                     <th mat-header-cell *matHeaderCellDef> Doctor Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.doctor.firstName}} </td>
+                    <td mat-cell *matCellDef="let element"> 
+                        {{element.doctor.name + ' ' + element.doctor.surname + ' - ' + element.doctor.code}} 
+                    </td>
                 </ng-container>
                 <ng-container matColumnDef="Emergency">
                     <th mat-header-cell *matHeaderCellDef> Emergency </th>
@@ -33,6 +36,7 @@
                     <td mat-cell *matCellDef="let element">
                         <button mat-raised-button color="primary">Edit</button>
                         <button mat-raised-button color="warn">Delete</button>
+                        <button mat-raised-button>Download</button>
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

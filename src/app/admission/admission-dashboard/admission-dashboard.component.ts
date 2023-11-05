@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreatePatientDialogComponent } from '../../create-patient/create-patient-dialog/create-patient-dialog.component';
 import { CreateAdmissionDialogComponent } from '../create-admission-dialog/create-admission-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AdmissionService } from 'src/app/services/admission.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-admission-dashboard',
@@ -15,10 +17,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AdmissionDashboardComponent {
   admissions! : Admission[] 
-/*  = [{admissionId: 1, admissionDate: new Date(), patientName: "Patient1", doctorName: "Doctor1", isEmergency: false},
-  {admissionId: 2, admissionDate: new Date(), patientName: "Patient2", doctorName: "Doctor2", isEmergency: false},
-  {admissionId: 3, admissionDate: new Date(), patientName: "Patient3", doctorName: "Doctor3", isEmergency: false}]
-  */
   displayedColumns: string[] = ["admissionId", "Date", "Patient Name", "Doctor Name", "Emergency", "Action"];
   @ViewChild(MatPaginator) paginator! : MatPaginator
   dataSource = new MatTableDataSource<Admission>(this.admissions)
@@ -28,8 +26,16 @@ export class AdmissionDashboardComponent {
     end: new FormControl<Date | null>(null),
   });
 
-  constructor(private dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(private dialog: MatDialog, private snackBar: MatSnackBar, private admissionService: AdmissionService,
+    private authService: AuthService) {
     this.dataSource.paginator = this.paginator
+    this.initializeAdmissions()
+  }
+
+  initializeAdmissions() {
+    this.admissionService.getAdmissions().subscribe((admissions) => {
+      this.admissions = admissions
+    })
   }
 
   openCreatePatient() {
@@ -54,9 +60,24 @@ export class AdmissionDashboardComponent {
       width: 'fit-content',
       height: 'fit-content'
     })
+
+    dialogRef.componentInstance.successEvent.subscribe((admission) => {
+      this.initializeAdmissions()
+      this.openSnackbar('Successfully added new appointment!')
+      dialogRef.close()
+    })
+
+    dialogRef.componentInstance.failureEvent.subscribe((error) => {
+      this.openSnackbar(`Error while processing the request ${error}`)
+      dialogRef.close()
+    })
   }
 
   openSnackbar(message: string) {
     this.snackBar.open(message, 'Close', { duration: 4000, verticalPosition: 'bottom' });
+  }
+
+  logout() {
+    this.authService.logout()
   }
 }

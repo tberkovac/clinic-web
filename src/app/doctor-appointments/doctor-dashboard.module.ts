@@ -14,12 +14,16 @@ import { MatInputModule } from '@angular/material/input';
 import { CreatePatientModule } from 'src/app/create-patient/create-patient.module';
 import { DoctorDashboardRoutingModule } from './doctor-dashboard-routing.module';
 import { DoctorDashboardComponent } from './doctor-dashboard/doctor-dashboard.component';
+import { CommonModule } from '@angular/common';
+import { CreateRecordComponent } from './create-record/create-record.component';
 
 @NgModule({
   declarations: [
-    DoctorDashboardComponent
+    DoctorDashboardComponent,
+    CreateRecordComponent
   ],
   imports: [
+    CommonModule,
     DoctorDashboardRoutingModule,
     CreatePatientModule,
     ReactiveFormsModule,

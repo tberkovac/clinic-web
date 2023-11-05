@@ -1,5 +1,6 @@
 import { Doctor } from "./doctor";
 import { Patient } from "./patient";
+import { Record } from "./record";
 
 export interface Admission {
     admissionId?: number,
@@ -9,5 +10,6 @@ export interface Admission {
     doctorId: number,
     doctor: Doctor,
     recordId?: number
+    record: Record
     isEmergency: boolean,
 }

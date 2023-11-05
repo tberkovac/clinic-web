@@ -1,0 +1,12 @@
+<div class="form-container">
+    <form [formGroup]="record" (ngSubmit)="createRecord()">
+        <mat-form-field ngDefaultControl appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput placeholder="Name" [formControl]="descriptionControl"></textarea>
+        </mat-form-field>
+        <br>
+        <div class="button-container">
+            <button mat-raised-button type="submit">Create</button>
+        </div>
+    </form>
+</div>

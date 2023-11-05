@@ -15,6 +15,7 @@ import { PatientService } from 'src/app/services/patient.service';
 })
 export class CreateAdmissionDialogComponent implements OnInit {
   @Output() successEvent = new EventEmitter<void>();
+  @Output() failureEvent = new EventEmitter<string>();
 
   dateOfAdmissionControl = new FormControl(new Date(), [Validators.required])
   patientIdControl = new FormControl<number>(0)
@@ -58,7 +59,7 @@ export class CreateAdmissionDialogComponent implements OnInit {
     };
     this.admissionService.createAdmission(admissionData).subscribe({
       next: (admission) => this.successEvent.emit(),
-      error: (err) => console.log(err)
+      error: (err) => this.failureEvent.emit(err)
     })
   }
 }
