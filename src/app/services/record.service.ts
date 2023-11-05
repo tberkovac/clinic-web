@@ -8,9 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class RecordService {
 
-  constructor(private http: HttpClient) {
-
-  }
+  constructor(private http: HttpClient) { }
 
   createRecord(record: Record, admissionId: number) : Observable<Record> {
     return this.http.post<Record>(`https://localhost:7125/Records/CreateRecord/${admissionId}`, record)

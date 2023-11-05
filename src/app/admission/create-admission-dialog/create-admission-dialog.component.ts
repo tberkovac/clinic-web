@@ -2,8 +2,6 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { combineLatest, map } from 'rxjs';
 import { Admission } from 'src/app/models/admission';
-import { Doctor } from 'src/app/models/doctor';
-import { Patient } from 'src/app/models/patient';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { PatientService } from 'src/app/services/patient.service';
@@ -13,7 +11,7 @@ import { PatientService } from 'src/app/services/patient.service';
   templateUrl: './create-admission-dialog.component.html',
   styleUrls: ['./create-admission-dialog.component.scss']
 })
-export class CreateAdmissionDialogComponent implements OnInit {
+export class CreateAdmissionDialogComponent {
   @Output() successEvent = new EventEmitter<void>();
   @Output() failureEvent = new EventEmitter<string>();
 
@@ -38,18 +36,11 @@ export class CreateAdmissionDialogComponent implements OnInit {
     }))
   )
 
-  positions: any[] = ['Programmer', 'Businness Analyst', 'Designer', 'DBA'];
-
-
   constructor(private formBuilder: FormBuilder, 
     private patientService: PatientService, 
     private doctorService: DoctorService,
     private admissionService: AdmissionService) {
       
-  }
-
-  ngOnInit() {
-   
   }
 
   createAdmission() {
