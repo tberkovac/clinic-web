@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Admission } from '../../models/admission';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -9,33 +9,63 @@ import { CreateAdmissionDialogComponent } from '../create-admission-dialog/creat
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { PaginationService } from 'src/app/services/pagination.service';
+import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-admission-dashboard',
   templateUrl: './admission-dashboard.component.html',
-  styleUrls: ['./admission-dashboard.component.scss']
+  styleUrls: ['./admission-dashboard.component.scss'],
+  providers: [PaginationService]
 })
-export class AdmissionDashboardComponent {
-  admissions! : Admission[] 
+export class AdmissionDashboardComponent implements OnInit {
   displayedColumns: string[] = ["admissionId", "Date", "Patient Name", "Doctor Name", "Emergency", "Action"];
-  @ViewChild(MatPaginator) paginator! : MatPaginator
-  dataSource = new MatTableDataSource<Admission>(this.admissions)
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+  dataSource = new MatTableDataSource<Admission>()
 
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
 
+  data$ = this.paginationService.data$
+  currentPage$ = this.paginationService.currentPage$
+  currentPageSize$ = this.paginationService.currentPageSize$
+  totalCount$ = this.paginationService.totalCount$
+
+  combinedData$ = combineLatest([this.data$, this.currentPage$, this.currentPageSize$, this.totalCount$]).pipe(
+    map(([data, currentPage, currentPageSize, totalCount]) => ({
+      currentPage,
+      currentPageSize,
+      data,
+      totalCount
+    })))
+
   constructor(private dialog: MatDialog, private snackBar: MatSnackBar, private admissionService: AdmissionService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private paginationService: PaginationService<Admission>) {
     this.dataSource.paginator = this.paginator
+  }
+
+  ngOnInit() {
     this.initializeAdmissions()
   }
 
   initializeAdmissions() {
-    this.admissionService.getAdmissions().subscribe((admissions) => {
-      this.admissions = admissions
+    this.admissionService.getAdmissions(1, 1).subscribe((admissionsPage) => {
+      this.paginationService.setData(admissionsPage.data);
+      this.paginationService.setPageSize(admissionsPage.pageSize)
+      this.paginationService.setTotalCount(admissionsPage.numberOfElements)
     })
+  }
+
+  pageChanged(event: any) {
+    this.admissionService.getAdmissions(event.pageIndex+1, event.pageSize).subscribe((admissionsPage) => {
+      this.paginationService.setData(admissionsPage.data)
+      this.paginationService.setPage(admissionsPage.page)
+      this.paginationService.setPageSize(admissionsPage.pageSize)
+      this.paginationService.setTotalCount(admissionsPage.numberOfElements)
+    });
   }
 
   openCreatePatient() {

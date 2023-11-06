@@ -27,8 +27,8 @@ export class CreateAdmissionDialogComponent {
     emergency: this.emergencyControl
   });
 
-  doctors$ = this.doctorService.getDoctors()
-  patients$ = this.patientService.getPatients()
+  doctors$ = this.doctorService.getAllDoctors()
+  patients$ = this.patientService.getAllPatients()
   data$ = combineLatest([this.doctors$, this.patients$]).pipe(
     map(([doctors, patients]) => ({
       doctors,

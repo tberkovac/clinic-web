@@ -16,7 +16,6 @@ export class CreateRecordComponent {
   @Output() successEvent = new EventEmitter<void>();
   @Output() failureEvent = new EventEmitter<string>();
 
-
   descriptionControl = new FormControl<string>("", [Validators.required])
 
   record = this.formBuilder.group({
@@ -37,6 +36,5 @@ export class CreateRecordComponent {
       next: (admission) => this.successEvent.emit(),
       error: (err) => this.failureEvent.emit(err)
     })
-    
   }
 }

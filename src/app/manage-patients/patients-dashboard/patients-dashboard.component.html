@@ -3,42 +3,45 @@
         <button mat-raised-button (click)="goBack()">Go Back</button>
         <button mat-raised-button (click)="openCreatePatient()">Create Patient</button>
     </mat-card-header>
-    <mat-card-content>
-        <div class="mat-elevation-z3">
-            <table mat-table [dataSource]="patients">
-                <ng-container matColumnDef="Name">
-                    <th mat-header-cell *matHeaderCellDef> Full name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
-                </ng-container>
-                <ng-container matColumnDef="Surname">
-                    <th mat-header-cell *matHeaderCellDef> Date of Birth </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dateOfBirth | date}} </td>
-                </ng-container>ƒ
-                <ng-container matColumnDef="Title">
-                    <th mat-header-cell *matHeaderCellDef> UMCN </th>
-                    <td mat-cell *matCellDef="let element"> {{element.umcn}} </td>
-                </ng-container>
-                <ng-container matColumnDef="Code">
-                    <th mat-header-cell *matHeaderCellDef> Gender </th>
-                    <td mat-cell *matCellDef="let element"> {{convertGenderToString(element.gender)}} </td>
-                </ng-container>
-                <ng-container matColumnDef="Action">
-                    <th mat-header-cell *matHeaderCellDef> Action </th>
-                    <td mat-cell *matCellDef="let element">
-                        <button mat-raised-button color="primary">Edit</button>
-                        <button mat-raised-button color="warn">Delete</button>
-                    </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-        </div>
-    </mat-card-content>
-    <mat-card-footer>
-        <div class="footer-container mat-elevation-z8">
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-                aria-label="Select page of periodic elements">
-            </mat-paginator>
-        </div>
-    </mat-card-footer>
+    <ng-container *ngIf="combinedData$ | async as data">
+
+        <mat-card-content>
+            <div class="mat-elevation-z3">
+                <table mat-table [dataSource]="data.data">
+                    <ng-container matColumnDef="Name">
+                        <th mat-header-cell *matHeaderCellDef> Full name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Surname">
+                        <th mat-header-cell *matHeaderCellDef> Date of Birth </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dateOfBirth | date}} </td>
+                    </ng-container>ƒ
+                    <ng-container matColumnDef="Title">
+                        <th mat-header-cell *matHeaderCellDef> UMCN </th>
+                        <td mat-cell *matCellDef="let element"> {{element.umcn}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Code">
+                        <th mat-header-cell *matHeaderCellDef> Gender </th>
+                        <td mat-cell *matCellDef="let element"> {{convertGenderToString(element.gender)}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Action">
+                        <th mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-raised-button color="primary">Edit</button>
+                            <button mat-raised-button color="warn">Delete</button>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </mat-card-content>
+        <mat-card-footer>
+            <div class="footer-container mat-elevation-z8">
+                <mat-paginator [length]="data.totalCount" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements" (page)="pageChanged($event)">
+                </mat-paginator>
+            </div>
+        </mat-card-footer>
+    </ng-container>
 </mat-card>

@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Admission } from '../models/admission';
 import { Observable } from 'rxjs';
+import { PageResponse } from '../models/pageResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +15,18 @@ export class AdmissionService {
     return this.http.post<Admission>('https://localhost:7125/Admissions/Create', admission)
   }
 
-  getAdmissions() : Observable<Admission[]> {
-    return this.http.get<Admission[]>('https://localhost:7125/Admissions/GetAll')
+  getAdmissions(page: number, pageSize: number) : Observable<PageResponse<Admission>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+    return this.http.get<PageResponse<Admission>>('https://localhost:7125/Admissions/GetAll', { params })
   }
 
-  getAdmissionsForUser(userId: number) : Observable<Admission[]> {
-    return this.http.get<Admission[]>(`https://localhost:7125/Admissions/GetDoctorsAdmissions/${userId}`)
+  getAdmissionsForUser(userId: number, page: number, pageSize: number) : Observable<PageResponse<Admission>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+    return this.http.get<PageResponse<Admission>>(`https://localhost:7125/Admissions/GetDoctorsAdmissions/${userId}`, { params })
   }
 
   updateAdmission(admission: Admission) : Observable<Admission> {

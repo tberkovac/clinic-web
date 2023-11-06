@@ -7,27 +7,44 @@ import { DoctorService } from 'src/app/services/doctor.service';
 import { CreateDoctorDialogComponent } from '../create-doctor-dialog/create-doctor-dialog.component';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PaginationService } from 'src/app/services/pagination.service';
+import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-doctors-dashboard',
   templateUrl: './doctors-dashboard.component.html',
-  styleUrls: ['./doctors-dashboard.component.scss']
+  styleUrls: ['./doctors-dashboard.component.scss'],
+  providers: [PaginationService]
 })
 export class DoctorsDashboardComponent {
-  doctors!: Doctor[]
   displayedColumns: string[] = ["Name", "Surname", "Title", "Code", "Action"];
   @ViewChild(MatPaginator) paginator!: MatPaginator
-  dataSource = new MatTableDataSource<Doctor>(this.doctors)
+  dataSource = new MatTableDataSource<Doctor>()
 
-  constructor(private doctorService: DoctorService, private dialog: MatDialog, private router: Router, private snackBar: MatSnackBar) {
+  data$ = this.paginationService.data$
+  currentPage$ = this.paginationService.currentPage$
+  currentPageSize$ = this.paginationService.currentPageSize$
+  totalCount$ = this.paginationService.totalCount$
+
+  combinedData$ = combineLatest([this.data$, this.currentPage$, this.currentPageSize$, this.totalCount$]).pipe(
+    map(([data, currentPage, currentPageSize, totalCount]) => ({
+      currentPage,
+      currentPageSize,
+      data,
+      totalCount
+    })))
+
+  constructor(private doctorService: DoctorService, private dialog: MatDialog,
+    private router: Router, private snackBar: MatSnackBar, private paginationService: PaginationService<Doctor>) {
     this.dataSource.paginator = this.paginator
     this.initializeDoctorList()
   }
 
   initializeDoctorList() {
-    this.doctorService.getDoctors().subscribe({
-      next: (doctors) => this.doctors = doctors,
-      error: (err) => console.log(err)
+    this.doctorService.getDoctors(1, 10).subscribe((doctorsPage) => {
+      this.paginationService.setData(doctorsPage.data);
+      this.paginationService.setPageSize(doctorsPage.pageSize)
+      this.paginationService.setTotalCount(doctorsPage.numberOfElements)
     })
   }
 
@@ -55,5 +72,14 @@ export class DoctorsDashboardComponent {
 
   openSnackbar(message: string) {
     this.snackBar.open(message, 'Close', { duration: 4000, verticalPosition: 'bottom' });
+  }
+
+  pageChanged(event: any) {
+    this.doctorService.getDoctors(event.pageIndex + 1, event.pageSize).subscribe((admissionsPage) => {
+      this.paginationService.setData(admissionsPage.data)
+      this.paginationService.setPage(admissionsPage.page)
+      this.paginationService.setPageSize(admissionsPage.pageSize)
+      this.paginationService.setTotalCount(admissionsPage.numberOfElements)
+    });
   }
 }
