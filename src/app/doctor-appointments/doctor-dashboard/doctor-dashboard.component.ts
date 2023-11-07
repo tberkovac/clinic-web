@@ -62,11 +62,9 @@ export class DoctorDashboardComponent {
         return of(null);
       })
     ).subscribe((admissionsPage) => {
-      if (admissionsPage?.data) {
-        this.paginationService.setData(admissionsPage.data);
-        this.paginationService.setPageSize(admissionsPage.pageSize)
-        this.paginationService.setTotalCount(admissionsPage.numberOfElements)
-      }
+      this.paginationService.setData(admissionsPage!.data);
+      this.paginationService.setPageSize(admissionsPage!.pageSize)
+      this.paginationService.setTotalCount(admissionsPage!.numberOfElements)
     });
   }
 

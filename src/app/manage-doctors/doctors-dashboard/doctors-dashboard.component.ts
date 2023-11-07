@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginationService } from 'src/app/services/pagination.service';
 import { combineLatest, map } from 'rxjs';
+import { ConfirmationDialogComponent } from 'src/app/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-doctors-dashboard',
@@ -69,6 +70,38 @@ export class DoctorsDashboardComponent {
       dialogRef.close()
     })
   }
+
+  deleteDoctor(doctorId: number) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      height: 'auto',
+      data: {
+        title: 'Delete Patient',
+        message: 'Are you sure you want to delete this doctor?',
+        btnOkText: 'Delete',
+        btnCancelText: 'Cancel'
+      }
+    })
+
+    dialogRef.componentInstance.onConfirm.subscribe(() => {
+      this.doctorService.deleteDoctor(doctorId).subscribe({
+        next: (doctor) => {
+          this.openSnackbar('Successfully deleted patient!')
+          this.initializeDoctorList()
+        },
+        error: (err) => {
+          this.openSnackbar(`Error while processing request ${JSON.stringify(err)}`)
+        }
+      })
+      dialogRef.close()
+    })
+
+    dialogRef.componentInstance.onDecline.subscribe(() => {
+      console.log('cancel clicked')
+      dialogRef.close()
+    })
+  }
+
 
   openSnackbar(message: string) {
     this.snackBar.open(message, 'Close', { duration: 4000, verticalPosition: 'bottom' });

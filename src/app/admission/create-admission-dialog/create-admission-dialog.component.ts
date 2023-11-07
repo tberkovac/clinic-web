@@ -15,13 +15,13 @@ export class CreateAdmissionDialogComponent {
   @Output() successEvent = new EventEmitter<void>();
   @Output() failureEvent = new EventEmitter<string>();
 
-  dateOfAdmissionControl = new FormControl(new Date(), [Validators.required])
-  patientIdControl = new FormControl<number>(0)
-  doctorIdControl = new FormControl<number>(0)
-  emergencyControl = new FormControl<boolean>(false)
+  dateOfAdmissionControl = new FormControl("", [Validators.required])
+  patientIdControl = new FormControl<number>(0, [Validators.required])
+  doctorIdControl = new FormControl<number>(0, [Validators.required])
+  emergencyControl = new FormControl<boolean>(false, [Validators.required])
 
   admission = this.formBuilder.group({
-    dateOfAdmission: this.dateOfAdmissionControl,
+    admissionDate: this.dateOfAdmissionControl,
     patientId: this.patientIdControl,
     doctorId: this.doctorIdControl,
     emergency: this.emergencyControl
@@ -36,6 +36,8 @@ export class CreateAdmissionDialogComponent {
     }))
   )
 
+  today = new Date()
+
   constructor(private formBuilder: FormBuilder, 
     private patientService: PatientService, 
     private doctorService: DoctorService,
@@ -48,6 +50,7 @@ export class CreateAdmissionDialogComponent {
       ...this.admission.value as unknown as Admission,
       admissionId: 0
     };
+    console.log(JSON.stringify(admissionData))
     this.admissionService.createAdmission(admissionData).subscribe({
       next: (admission) => this.successEvent.emit(),
       error: (err) => this.failureEvent.emit(err)

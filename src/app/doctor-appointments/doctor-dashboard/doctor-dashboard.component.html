@@ -32,10 +32,9 @@
                         <th mat-header-cell *matHeaderCellDef> Action </th>
                         <td mat-cell *matCellDef="let element">
                             <button mat-raised-button (click)="openCreateRecord(element)"
-                                disabled="element.recordId !== null">Create record</button>
+                                [disabled]="element.recordId !== null">Create record</button>
                             <button mat-raised-button color="primary" class="margin-left">Edit</button>
-                            <button mat-raised-button color="warn" class="margin-left">Delete</button>
-                            <button mat-raised-button>Download</button>
+                            <button mat-raised-button class="margin-left">Download</button>
                         </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

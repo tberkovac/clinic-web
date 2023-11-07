@@ -32,4 +32,8 @@ export class AdmissionService {
   updateAdmission(admission: Admission) : Observable<Admission> {
     return this.http.put<Admission>('https://localhost:7125/Admissions/Update', admission)
   }
+
+  deleteAdmission(admissionId: number) : Observable<Admission> {
+    return this.http.delete<Admission>(`https://localhost:7125/Admissions/Delete/${admissionId}`)
+  }
 }

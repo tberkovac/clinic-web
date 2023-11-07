@@ -25,4 +25,8 @@ export class DoctorService {
   createDoctor(doctor: Doctor) : Observable<Doctor> {
     return this.http.post<Doctor>('https://localhost:7125/Doctors/Create', doctor);
   }
+
+  deleteDoctor(doctorId: number) : Observable<Doctor> {
+    return this.http.delete<Doctor>(`https://localhost:7125/Doctors/Delete/${doctorId}`)
+  }
 }

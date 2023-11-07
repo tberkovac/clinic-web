@@ -16,6 +16,7 @@ import { AddmissionRoutingModule } from './admission-routing.module';
 import { CommonModule } from '@angular/common';
 import { CreateAdmissionDialogComponent } from './create-admission-dialog/create-admission-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
+import { ConfirmationDialogModule } from '../confirmation-dialog/confirmation-dialog.module';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
     imports: [
         CommonModule,
         AddmissionRoutingModule,
+        ConfirmationDialogModule,
         CreatePatientModule,
         ReactiveFormsModule,
         MatTableModule,

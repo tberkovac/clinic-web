@@ -3,8 +3,8 @@
         <form [formGroup]="admission" (ngSubmit)="createAdmission()">
             <mat-form-field>
                 <mat-label>Date of appointment</mat-label>
-                <input matInput placeholder="Date of Birth" [matDatepicker]="picker"
-                    [formControl]="dateOfAdmissionControl">
+                <input matInput placeholder="Date of appointment" [matDatepicker]="picker"
+                    [formControl]="dateOfAdmissionControl" [min]="today">
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>

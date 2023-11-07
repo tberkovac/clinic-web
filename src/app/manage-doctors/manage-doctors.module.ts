@@ -18,6 +18,7 @@ import { ManageDoctorsRoutingModule } from './manage-doctors-routing.module';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar'
+import { ConfirmationDialogModule } from '../confirmation-dialog/confirmation-dialog.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar'
   imports: [
     CommonModule,
     ManageDoctorsRoutingModule,
+    ConfirmationDialogModule,
     CreatePatientModule,
     ReactiveFormsModule,
     MatTableModule,

@@ -11,6 +11,7 @@ import { AdmissionService } from 'src/app/services/admission.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { PaginationService } from 'src/app/services/pagination.service';
 import { combineLatest, map } from 'rxjs';
+import { ConfirmationDialogComponent } from 'src/app/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-admission-dashboard',
@@ -99,6 +100,37 @@ export class AdmissionDashboardComponent implements OnInit {
 
     dialogRef.componentInstance.failureEvent.subscribe((error) => {
       this.openSnackbar(`Error while processing the request ${error}`)
+      dialogRef.close()
+    })
+  }
+
+  deleteAdmission(admissionId: number) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      height: 'auto',
+      data: {
+        title: 'Delete Admission',
+        message: 'Are you sure you want to delete this admission?',
+        btnOkText: 'Delete',
+        btnCancelText: 'Cancel'
+      }
+    })
+
+    dialogRef.componentInstance.onConfirm.subscribe(() => {
+      this.admissionService.deleteAdmission(admissionId).subscribe({
+        next: (admission) => {
+          this.openSnackbar('Successfully deleted patient!')
+          this.initializeAdmissions()
+        },
+        error: (err) => {
+          this.openSnackbar(`Error while processing request ${JSON.stringify(err)}`)
+        }
+      })
+      dialogRef.close()
+    })
+
+    dialogRef.componentInstance.onDecline.subscribe(() => {
+      console.log('cancel clicked')
       dialogRef.close()
     })
   }
