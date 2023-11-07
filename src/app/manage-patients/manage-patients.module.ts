@@ -15,6 +15,7 @@ import { CreatePatientModule } from 'src/app/create-patient/create-patient.modul
 import { PatientsDashboardComponent } from './patients-dashboard/patients-dashboard.component';
 import { ManagePatientsRoutingModule } from './manage-patients-routing.module';
 import { CommonModule, DatePipe } from '@angular/common';
+import { ConfirmationDialogModule } from '../confirmation-dialog/confirmation-dialog.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CommonModule, DatePipe } from '@angular/common';
     CommonModule,
     ManagePatientsRoutingModule,
     CreatePatientModule,
+    ConfirmationDialogModule,
     ReactiveFormsModule,
     MatTableModule,
     MatCardModule,

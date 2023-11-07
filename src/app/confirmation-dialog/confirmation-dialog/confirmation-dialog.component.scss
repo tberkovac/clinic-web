@@ -1,13 +1,19 @@
 .header-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: center;
+    padding: 16px;
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.main-container {
     padding: 16px;
 }
 
 .footer-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     padding: 16px;
 }

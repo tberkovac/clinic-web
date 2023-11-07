@@ -33,8 +33,8 @@
                         <td mat-cell *matCellDef="let element">
                             <button mat-raised-button (click)="openCreateRecord(element)"
                                 disabled="element.recordId !== null">Create record</button>
-                            <button mat-raised-button color="primary">Edit</button>
-                            <button mat-raised-button color="warn">Delete</button>
+                            <button mat-raised-button color="primary" class="margin-left">Edit</button>
+                            <button mat-raised-button color="warn" class="margin-left">Delete</button>
                             <button mat-raised-button>Download</button>
                         </td>
                     </ng-container>

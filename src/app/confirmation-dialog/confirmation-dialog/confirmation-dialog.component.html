@@ -1,0 +1,12 @@
+<mat-card>
+    <mat-card-header class="header-container">
+        {{ title }}
+    </mat-card-header>
+    <mat-card-content class="main-container">
+        {{ message }}
+    </mat-card-content>
+    <mat-card-footer class="footer-container">
+        <button mat-raised-button color="warn" (click)="confirm()">{{ btnOkText }}</button>
+        <button mat-raised-button (click)="decline()" class="margin-left">{{ btnCancelText }}</button>
+    </mat-card-footer>
+</mat-card>

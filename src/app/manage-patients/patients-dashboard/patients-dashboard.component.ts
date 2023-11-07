@@ -9,6 +9,8 @@ import { Gender } from 'src/app/models/gender';
 import { Router } from '@angular/router';
 import { PaginationService } from 'src/app/services/pagination.service';
 import { combineLatest, map } from 'rxjs';
+import { ConfirmationDialogComponent } from 'src/app/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -35,9 +37,9 @@ export class PatientsDashboardComponent {
       totalCount
     })))
 
-
   constructor(private patientService: PatientService, private dialog: MatDialog, 
-    private router: Router, private paginationService: PaginationService<Patient>) {
+    private router: Router, private paginationService: PaginationService<Patient>,
+    private snackBar: MatSnackBar) {
     this.dataSource.paginator = this.paginator
     this.initializePatientList()
   }
@@ -45,6 +47,7 @@ export class PatientsDashboardComponent {
   initializePatientList() {
     this.patientService.getPatients(1, 10).subscribe((patientsPage) => {
       this.paginationService.setData(patientsPage.data);
+      this.paginationService.setPage(patientsPage.page)
       this.paginationService.setPageSize(patientsPage.pageSize)
       this.paginationService.setTotalCount(patientsPage.numberOfElements)
     })
@@ -67,6 +70,41 @@ export class PatientsDashboardComponent {
     dialogRef.componentInstance.successEvent.subscribe(() => {
       this.initializePatientList()
     })
+  }
+
+  deletePatient(patientId: number) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      height: 'auto',
+      data: {
+        title: 'Delete Patient',
+        message: 'Are you sure you want to delete this patient?',
+        btnOkText: 'Delete',
+        btnCancelText: 'Cancel'
+      }
+    })
+
+    dialogRef.componentInstance.onConfirm.subscribe(() => {
+      this.patientService.deletePatient(patientId).subscribe({
+        next: (patient) => {
+          this.openSnackbar('Successfully deleted patient!')
+          this.initializePatientList()
+        },
+        error: (err) => {
+          this.openSnackbar(`Error while processing request ${JSON.stringify(err)}`)
+        }
+      })
+      dialogRef.close()
+    })
+
+    dialogRef.componentInstance.onDecline.subscribe(() => {
+      console.log('cancel clicked')
+      dialogRef.close()
+    })
+  }
+
+  openSnackbar(message: string) {
+    this.snackBar.open(message, 'Close', { duration: 4000, verticalPosition: 'bottom' });
   }
 
   pageChanged(event: any) {
