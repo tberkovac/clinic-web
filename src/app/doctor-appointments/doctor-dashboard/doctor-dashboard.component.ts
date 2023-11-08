@@ -25,7 +25,7 @@ export class DoctorDashboardComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator
   dataSource = new MatTableDataSource<Admission>(this.admissions)
 
-  range = new FormGroup({
+  dateRange = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
@@ -34,14 +34,20 @@ export class DoctorDashboardComponent {
   currentPage$ = this.paginationService.currentPage$
   currentPageSize$ = this.paginationService.currentPageSize$
   totalCount$ = this.paginationService.totalCount$
+  startDate$ = this.paginationService.startDate$
+  endDate$ = this.paginationService.endDate$
 
-  combinedData$ = combineLatest([this.data$, this.currentPage$, this.currentPageSize$, this.totalCount$]).pipe(
-    map(([data, currentPage, currentPageSize, totalCount]) => ({
+  combinedData$ = combineLatest([this.data$, this.currentPage$, this.currentPageSize$, this.totalCount$, this.startDate$, this.endDate$])
+  .pipe(
+    map(([data, currentPage, currentPageSize, totalCount, startDate, endDate]) => ({
       currentPage,
       currentPageSize,
       data,
-      totalCount
-    })))
+      totalCount,
+      startDate,
+      endDate
+    }))
+  )
 
   userId!: number;
 
@@ -57,7 +63,8 @@ export class DoctorDashboardComponent {
       switchMap((user) => {
         if (user.userId) {
           this.userId = user.userId
-          return this.admissionService.getAdmissionsForUser(user.userId, 1, 10);
+          const dateRange = this.dateRange.value
+          return this.admissionService.getAdmissionsForUser(user.userId, 1, 10, dateRange);
         }
         return of(null);
       })
@@ -131,11 +138,14 @@ export class DoctorDashboardComponent {
   }
 
   pageChanged(event: any) {
-    this.admissionService.getAdmissionsForUser(this.userId, event.pageIndex + 1, event.pageSize).subscribe((admissionsPage) => {
-      this.paginationService.setData(admissionsPage.data)
-      this.paginationService.setPage(admissionsPage.page)
-      this.paginationService.setPageSize(admissionsPage.pageSize)
-      this.paginationService.setTotalCount(admissionsPage.numberOfElements)
-    });
+    const dateRange = this.dateRange.value
+    this.admissionService.getAdmissionsForUser(this.userId, event.pageIndex + 1, event.pageSize, dateRange).subscribe(
+      (admissionsPage) => {
+        this.paginationService.setData(admissionsPage.data)
+        this.paginationService.setPage(admissionsPage.page)
+        this.paginationService.setPageSize(admissionsPage.pageSize)
+        this.paginationService.setTotalCount(admissionsPage.numberOfElements)
+      }
+    );
   }
 }

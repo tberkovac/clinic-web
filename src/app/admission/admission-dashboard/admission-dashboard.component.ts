@@ -24,7 +24,7 @@ export class AdmissionDashboardComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator
   dataSource = new MatTableDataSource<Admission>()
 
-  range = new FormGroup({
+  dateRange = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
@@ -33,14 +33,20 @@ export class AdmissionDashboardComponent implements OnInit {
   currentPage$ = this.paginationService.currentPage$
   currentPageSize$ = this.paginationService.currentPageSize$
   totalCount$ = this.paginationService.totalCount$
+  startDate$ = this.paginationService.startDate$
+  endDate$ = this.paginationService.endDate$
 
-  combinedData$ = combineLatest([this.data$, this.currentPage$, this.currentPageSize$, this.totalCount$]).pipe(
-    map(([data, currentPage, currentPageSize, totalCount]) => ({
-      currentPage,
-      currentPageSize,
-      data,
-      totalCount
-    })))
+  combinedData$ = combineLatest([this.data$, this.currentPage$, this.currentPageSize$, this.totalCount$, this.startDate$, this.endDate$])
+    .pipe(
+      map(([data, currentPage, currentPageSize, totalCount, startDate, endDate]) => ({
+        currentPage,
+        currentPageSize,
+        data,
+        totalCount,
+        startDate,
+        endDate
+      })
+    ))
 
   constructor(private dialog: MatDialog, private snackBar: MatSnackBar, private admissionService: AdmissionService,
     private authService: AuthService,
@@ -53,7 +59,8 @@ export class AdmissionDashboardComponent implements OnInit {
   }
 
   initializeAdmissions() {
-    this.admissionService.getAdmissions(1, 1).subscribe((admissionsPage) => {
+    const dateRange = this.dateRange.value
+    this.admissionService.getAdmissions(1, 1, dateRange).subscribe((admissionsPage) => {
       this.paginationService.setData(admissionsPage.data);
       this.paginationService.setPageSize(admissionsPage.pageSize)
       this.paginationService.setTotalCount(admissionsPage.numberOfElements)
@@ -61,7 +68,8 @@ export class AdmissionDashboardComponent implements OnInit {
   }
 
   pageChanged(event: any) {
-    this.admissionService.getAdmissions(event.pageIndex+1, event.pageSize).subscribe((admissionsPage) => {
+    const dateRange = this.dateRange.value
+    this.admissionService.getAdmissions(event.pageIndex+1, event.pageSize, dateRange).subscribe((admissionsPage) => {
       this.paginationService.setData(admissionsPage.data)
       this.paginationService.setPage(admissionsPage.page)
       this.paginationService.setPageSize(admissionsPage.pageSize)
@@ -99,7 +107,7 @@ export class AdmissionDashboardComponent implements OnInit {
     })
 
     dialogRef.componentInstance.failureEvent.subscribe((error) => {
-      this.openSnackbar(`Error while processing the request ${error}`)
+      this.openSnackbar(`Error while processing the request ${JSON.stringify(error)}`)
       dialogRef.close()
     })
   }

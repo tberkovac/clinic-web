@@ -7,11 +7,15 @@ export class PaginationService<T> {
   private pageSizeSource = new BehaviorSubject<number>(10);
   private totalCount = new BehaviorSubject<number>(10)
   private data = new BehaviorSubject<T[]>([])
+  private startDate = new BehaviorSubject<Date | null>(null)
+  private endDate = new BehaviorSubject<Date | null>(null)
 
   currentPage$ = this.pageSource.asObservable();
   currentPageSize$ = this.pageSizeSource.asObservable();
   data$ = this.data.asObservable();
   totalCount$ = this.totalCount.asObservable()
+  startDate$ = this.startDate.asObservable()
+  endDate$ = this.endDate.asObservable()
 
 
   constructor() { }
