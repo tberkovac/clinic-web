@@ -57,6 +57,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'clinic-web'
-          slot-name: 'Production'
-          package: .
+          package: ./dist/clinic-web
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AC8C5667F08F4798AFBA522F8E87BA36 }}
