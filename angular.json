@@ -65,7 +65,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "clinic-web:build:production"
+              "browserTarget": "clinic-web:build:production",
+              "port": 8080
             },
             "development": {
               "browserTarget": "clinic-web:build:development"
